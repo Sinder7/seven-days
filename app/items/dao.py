@@ -1,6 +1,6 @@
-from database.base_dao import BaseDAO
-from model import Item
+from app.database.base_dao import BaseDAO
+from .model import Item
 
 
-class ItemDao(BaseDAO):
+class ItemDAO(BaseDAO):
     model = Item

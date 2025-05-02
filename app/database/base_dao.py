@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import BaseModel
 
-from database.base import Base
+from .base import Base
 
 T = TypeVar("T", bound=Base)
 

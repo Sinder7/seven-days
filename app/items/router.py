@@ -4,8 +4,8 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .dao import ItemDAO
-from schemas import ItemSchema
-from database.session import get_session
+from .schemas import ItemSchema
+from app.database.session import get_session
 
 
 router: APIRouter = APIRouter(prefix="/items", tags=["item"])
