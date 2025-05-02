@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Integer, String, Float
 
-from app.database.base import Base
+from database.base import Base
 
 
 class Item(Base):
@@ -14,3 +14,6 @@ class Item(Base):
 
     def ___repr__(self) -> str:
         return f"Item(id={self.id!r}), name={self.name!r}"
+
+
+print(type(Item))
