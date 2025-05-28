@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}New Sale{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm form-container">
+    <div class="card-body">
+        <h1 class="card-title text-center mb-4">New Sale</h1>
+
+        <form method="post" action="/new-sale">
+            <div class="mb-4">
+                <label for="item_id" class="form-label">Select Item *</label>
+                <select class="form-select" id="item_id" name="item_id" required>
+                    <option value="">-- Select item --</option>
+                    {% for item in items %}
+                    <option value="{{ item.id }}" data-price="{{ item.price }}" data-quantity="{{ item.quantity }}">
+                        {{ item.name }} - ${{ "%.2f"|format(item.price) }} ({{ item.quantity }} in stock)
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="quantity_sold" class="form-label">Quantity *</label>
+                <input type="number" class="form-control" id="quantity_sold" name="quantity_sold" min="1" value="1"
+                    required>
+                <div class="form-text">Available: <span id="available-quantity">-</span></div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5>Sale Summary</h5>
+                    <p>Unit Price: $<span id="unit-price">0.00</span></p>
+                    <p>Total: $<span id="total-price">0.00</span></p>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <a href="/items" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                <button type="submit" class="btn btn-success">Complete Sale</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const itemSelect = document.getElementById('item_id');
+        const quantityInput = document.getElementById('quantity_sold');
+        const unitPriceSpan = document.getElementById('unit-price');
+        const totalPriceSpan = document.getElementById('total-price');
+        const availableQuantitySpan = document.getElementById('available-quantity');
+
+        function updateSaleSummary() {
+            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+            const price = parseFloat(selectedOption.dataset.price) || 0;
+            const quantity = parseInt(quantityInput.value) || 0;
+            const available = parseInt(selectedOption.dataset.quantity) || 0;
+
+            unitPriceSpan.textContent = price.toFixed(2);
+            totalPriceSpan.textContent = (price * quantity).toFixed(2);
+            availableQuantitySpan.textContent = available;
+
+            // Validate quantity
+            if (quantity > available) {
+                quantityInput.setCustomValidity(`Only ${available} available`);
+            } else {
+                quantityInput.setCustomValidity('');
+            }
+        }
+
+        itemSelect.addEventListener('change', updateSaleSummary);
+        quantityInput.addEventListener('input', updateSaleSummary);
+
+        // Initial update
+        updateSaleSummary();
+    });
+</script>
+{% endblock %}
+{% endblock %}

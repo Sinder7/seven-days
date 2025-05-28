@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Sales Statistics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Sales Statistics</h1>
+    <a href="/statistics" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-repeat"></i> Refresh
+    </a>
+</div>
+
+<div class="row">
+    <!-- Daily Statistics -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-sun"></i> Today's Statistics ({{ today }})
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="text-center">
+                        <h6>Revenue</h6>
+                        <h3 class="text-success">${{ "%.2f"|format(daily_revenue) }}</h3>
+                    </div>
+                    <div class="text-center">
+                        <h6>Items Sold</h6>
+                        <h3 class="text-primary">{{ daily_items_sold }}</h3>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="/sales?date={{ today }}" class="btn btn-outline-primary">
+                        View Today's Sales
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Monthly Statistics -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-calendar-month"></i> Monthly Statistics ({{ this_month }})
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="text-center">
+                        <h6>Revenue</h6>
+                        <h3 class="text-success">${{ "%.2f"|format(monthly_revenue) }}</h3>
+                    </div>
+                    <div class="text-center">
+                        <h6>Items Sold</h6>
+                        <h3 class="text-primary">{{ monthly_items_sold }}</h3>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="/sales?date={{ this_month }}" class="btn btn-outline-info">
+                        View Monthly Sales
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Selling Items -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0">
+            <i class="bi bi-trophy"></i> Top Selling Items (All Time)
+        </h5>
+    </div>
+    <div class="card-body">
+        {% if top_items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th class="text-center">Quantity Sold</th>
+                        <th class="text-end">Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in top_items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td class="text-center">{{ item.quantity }}</td>
+                        <td class="text-end">${{ "%.2f"|format(item.revenue) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No sales data available for top items.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

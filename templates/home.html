@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section bg-dark text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Welcome to Concert Merch Store</h1>
+        <p class="lead">Your source for official band merchandise</p>
+        <div class="mt-4">
+            <a href="/items" class="btn btn-primary btn-lg me-2">Browse Merch</a>
+            {% if not is_authenticated %}
+            <a href="/login" class="btn btn-outline-light btn-lg">Admin Login</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <i class="bi bi-music-note-list display-1 text-primary mb-3"></i>
+                    <h3 class="card-title">Extensive Collection</h3>
+                    <p class="card-text">Find merchandise from all your favorite bands and artists.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <i class="bi bi-truck display-1 text-success mb-3"></i>
+                    <h3 class="card-title">Fast Shipping</h3>
+                    <p class="card-text">Get your merch quickly with our reliable shipping.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <i class="bi bi-star display-1 text-warning mb-3"></i>
+                    <h3 class="card-title">Official Products</h3>
+                    <p class="card-text">All items are officially licensed band merchandise.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+body {
+    background-color: #f8f9fa;
+    padding-bottom: 60px;
+}
+
+.navbar {
+    margin-bottom: 30px;
+}
+
+.card {
+    border-radius: 10px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.form-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.hero-section {
+    border-radius: 15px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

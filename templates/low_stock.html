@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Low Stock Items{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Low Stock Items</h1>
+    <a href="/items" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left"></i> Back to Inventory
+    </a>
+</div>
+
+{% if items %}
+<div class="alert alert-warning">
+    <i class="bi bi-exclamation-triangle"></i> 
+    Showing {{ items|length }} items with low stock (less than 5 in inventory)
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>
+                            <a href="/item/{{ item.id }}" class="text-decoration-none">
+                                <strong>{{ item.name }}</strong>
+                            </a>
+                        </td>
+                        <td>{{ item.description|default('', true) }}</td>
+                        <td class="text-end">${{ "%.2f"|format(item.price) }}</td>
+                        <td class="text-center">
+                            <span class="badge bg-danger">
+                                {{ item.quantity }} in stock
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="/edit-item/{{ item.id }}" class="btn btn-sm btn-outline-warning">
+                                <i class="bi bi-pencil"></i> Restock
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-success">
+    <i class="bi bi-check-circle"></i> 
+    Great news! All items have sufficient stock.
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Merchandise Inventory{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Merchandise Inventory</h1>
+    
+    <div>
+        {% if is_authenticated %}
+        <a href="/add-item" class="btn btn-primary me-2">
+            <i class="bi bi-plus-circle"></i> Add Item
+        </a>
+        <a href="/new-sale" class="btn btn-success">
+            <i class="bi bi-cart-plus"></i> New Sale
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <form method="get" action="/items" class="row g-3">
+            <div class="col-md-8">
+                <input type="text" name="search" class="form-control" placeholder="Search items..."
+                    value="{{ search_query }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a href="/items" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if items %}
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>
+                            <a href="/item/{{ item.id }}" class="text-decoration-none">
+                                <strong>{{ item.name }}</strong>
+                            </a>
+                        </td>
+                        <td>{{ item.description|default('', true) }}</td>
+                        <td class="text-end">${{ "%.2f"|format(item.price) }}</td>
+                        <td class="text-center">
+                            <span
+                                class="badge {% if item.quantity < 5 %}bg-danger{% elif item.quantity < 10 %}bg-warning{% else %}bg-success{% endif %}">
+                                {{ item.quantity }} in stock
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="/item/{{ item.id }}" class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            {% if is_authenticated %}
+                            <a href="/edit-item/{{ item.id }}" class="btn btn-sm btn-outline-secondary me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button class="btn btn-sm btn-outline-danger"
+                                onclick="confirmDelete('{{ item.id }}', '{{ item.name }}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% if total_pages > 1 %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+            <a class="page-link" href="/items?page={{ page-1 }}&search={{ search_query }}">Previous</a>
+        </li>
+
+        {% for p in range(1, total_pages+1) %}
+        <li class="page-item {% if p == page %}active{% endif %}">
+            <a class="page-link" href="/items?page={{ p }}&search={{ search_query }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+
+        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+            <a class="page-link" href="/items?page={{ page+1 }}&search={{ search_query }}">Next</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="alert alert-info mt-4">
+    <i class="bi bi-info-circle"></i> No items found matching your search criteria.
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function confirmDelete(itemId, itemName) {
+        if (confirm(`Are you sure you want to delete "${itemName}"? This action cannot be undone.`)) {
+            window.location.href = `/delete-item/${itemId}`
+        }
+    }
+</script>
+{% endblock %}
